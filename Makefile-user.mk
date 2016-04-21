@@ -29,8 +29,8 @@ SMING_HOME = /opt/sming/Sming
 COM_PORT = /dev/tty.SLAB_USBtoUART
 
 ## Com port speed
-COM_SPEED	= 230400
-#COM_SPEED	= 115200
+# COM_SPEED	= 230400
+COM_SPEED	= 115200
 
 ## Configure flash parameters (for ESP12-E and other new boards):
 SPI_MODE = dio
