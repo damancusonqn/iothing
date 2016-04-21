@@ -22,19 +22,21 @@ void Led::on()
 
 void Led::flash(uint16_t time)
 {
-	digitalWrite(ledPIN, 1);
-	Timer ledTimerOnce;
-	// ledTimerOnce.initializeMs(time, off).startOnce();
+	on();
+	ledTimer.stop();
+	ledTimer.initializeMs(time, TimerDelegate(&Led::off, this)).startOnce();
 }
 
 void Led::blinkSTART(uint16_t time)
 {
-	// ledTimer.initializeMs(time, toggle).start();
+	ledTimer.stop();
+	ledTimer.initializeMs(time, TimerDelegate(&Led::toggle, this)).start();
 }
 
 void Led::blinkSTOP()
 {
 	ledTimer.stop();
+	off();
 }
 
 void Led::init(uint8_t pin){

@@ -21,6 +21,7 @@ public:
 private:
 	uint8_t ledPIN;
 	Timer ledTimer;
+	// Timer ledTimerOnce;
 };
 
 #endif //#ifndef LED_H

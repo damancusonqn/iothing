@@ -47,7 +47,7 @@ void onIndex(HttpRequest &request, HttpResponse &response)
 
 	response.sendJsonObject(stream);
 
-	blueLED.toggle();
+	blueLED.flash(250);
 }
 
 void onTemp(HttpRequest &request, HttpResponse &response)
@@ -100,6 +100,7 @@ void connectOk()
 	startWebServer();
 	startmDNS();  // Start mDNS "Advertise" of your hostname "test.local" for this example
 
+	blueLED.blinkSTOP();
 	blueLED.on();
 }
 void connectFail()
@@ -107,7 +108,8 @@ void connectFail()
 	debugf("I'm NOT CONNECTED!");
 	WifiStation.waitConnection(connectOk, 10, connectFail);
 
-	blueLED.off();
+	// blueLED.blinkSTOP();
+	// blueLED.off();
 }
 
 void init()
@@ -126,5 +128,5 @@ void init()
 	WifiStation.waitConnection(connectOk, 30, connectFail);
 
 	blueLED.init(LED_PIN);
-
+	blueLED.blinkSTART(100);
 }
