@@ -9,6 +9,8 @@
 	#define WIFI_PWD "4174363082906394"
 #endif
 
+NtpClient ntpClient("pool.ntp.org", 10*60);
+
 HttpServer server;
 // static int counter;
 
@@ -43,11 +45,11 @@ void onIndex(HttpRequest &request, HttpResponse &response)
 	JsonObjectStream* stream = new JsonObjectStream();
 	JsonObject& json = stream->getRoot();
 
-	json["foo"] = "bar";
+	json["time"] = SystemClock.getSystemTimeString();
 
 	response.sendJsonObject(stream);
 
-	blueLED.flash(250);
+	blueLED.flash(100);
 }
 
 void onTemp(HttpRequest &request, HttpResponse &response)
@@ -114,7 +116,7 @@ void connectFail()
 
 void init()
 {
-	spiffs_mount();
+	// spiffs_mount();
 
 	Serial.begin(SERIAL_BAUD_RATE); // 115200 by default
 	Serial.systemDebugOutput(true); // Enable debug output to serial

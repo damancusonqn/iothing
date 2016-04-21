@@ -6,6 +6,8 @@ Led::Led()
 {
 }
 
+// TODO: Think about implementing PWM to make it nicer.
+
 void Led::toggle()
 {
 	digitalWrite(ledPIN, !digitalRead(ledPIN));
