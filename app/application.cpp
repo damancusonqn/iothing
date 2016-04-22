@@ -2,6 +2,7 @@
 #include <SmingCore/SmingCore.h>
 
 #include <led.h>
+#include <button.h>
 
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
@@ -16,6 +17,9 @@ HttpServer server;
 
 Led blueLED;
 #define LED_PIN 16 //GPIO2
+
+Button configButton;
+#define CONFIG_BUTTON 5
 
 //mDNS using ESP8266 SDK functions
 void startmDNS() {
@@ -46,6 +50,7 @@ void onIndex(HttpRequest &request, HttpResponse &response)
 	JsonObject& json = stream->getRoot();
 
 	json["time"] = SystemClock.getSystemTimeString();
+	json["timestamp"] = RTC.getRtcSeconds();
 
 	response.sendJsonObject(stream);
 
@@ -122,6 +127,9 @@ void init()
 	Serial.systemDebugOutput(true); // Enable debug output to serial
 
 	WifiStation.config(WIFI_SSID, WIFI_PWD);
+
+	// WifiStation.smartConfigStart(SCT_EspTouch);
+
 	WifiStation.enable(true);
 	WifiAccessPoint.enable(false);
 
@@ -130,5 +138,7 @@ void init()
 	WifiStation.waitConnection(connectOk, 30, connectFail);
 
 	blueLED.init(LED_PIN);
-	blueLED.blinkSTART(100);
+	// blueLED.blinkSTART(100);
+
+	configButton.init(CONFIG_BUTTON); //GPIO5
 }
