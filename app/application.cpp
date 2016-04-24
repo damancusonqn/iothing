@@ -96,23 +96,26 @@ void startWebServer()
 	Serial.println("==============================\r\n");
 }
 
+void doSmartConf()
+{
+	Serial.println("DBG: start SmartConfig");
+	WifiStation.smartConfigStart(SCT_EspTouch);
+}
 
 // Will be called when WiFi station was connected to AP
 void connectOk()
 {
-	Serial.println("I'm CONNECTED");
-	// if (!fileExist("index.html"))
-	// 		fileSetContent("index.html", "<h3>Congrats !! You are Connected to your ESP module with mDNS address test.local</h3>");
+	Serial.println("WiFi CONNECTED");
 
 	startWebServer();
-	startmDNS();  // Start mDNS "Advertise" of your hostname "test.local" for this example
+	startmDNS();
 
 	blueLED.blinkSTOP();
 	blueLED.on();
 }
 void connectFail()
 {
-	debugf("I'm NOT CONNECTED!");
+	debugf("WiFi NOT CONNECTED!");
 	WifiStation.waitConnection(connectOk, 10, connectFail);
 
 	// blueLED.blinkSTOP();
@@ -128,8 +131,6 @@ void init()
 
 	WifiStation.config(WIFI_SSID, WIFI_PWD);
 
-	// WifiStation.smartConfigStart(SCT_EspTouch);
-
 	WifiStation.enable(true);
 	WifiAccessPoint.enable(false);
 
@@ -138,7 +139,7 @@ void init()
 	WifiStation.waitConnection(connectOk, 30, connectFail);
 
 	blueLED.init(LED_PIN);
-	// blueLED.blinkSTART(100);
+	blueLED.blinkSTART(100);
 
-	configButton.init(CONFIG_BUTTON); //GPIO5
+	configButton.init(CONFIG_BUTTON, doSmartConf); //GPIO5
 }

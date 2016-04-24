@@ -8,9 +8,10 @@ Button::Button()
 {
 }
 
-void Button::init(uint16_t _interruptPin)
+void Button::init(uint16_t _interruptPin, LongPressDelegate callback)
 {
     interruptPin = _interruptPin;
+    ButtonDelegate = callback;
 
     pinMode(interruptPin, INPUT_PULLUP);
     attachInterrupt(interruptPin, Delegate<void()>(&Button::interruptHandler, this), FALLING);
@@ -19,26 +20,20 @@ void Button::init(uint16_t _interruptPin)
 
 void Button::checkState()
 {
-    // digitalWrite(16, !digitalRead(16));
-
-    // Serial.println("DBG:+++");
     if (digitalRead(interruptPin)){
         buttonTimer.stop();
-        Serial.println("DBG:Timer stopped");
     }
     if (++downCount >= LONG_PRESS_TIME*4){ /*timer_freq =250ms*/
-        Serial.println("DBG:LongPress!");
         buttonTimer.stop();
+        ButtonDelegate();
     }
 }
 
 
 void Button::interruptHandler() /*Falling edge*/
 {
-    Serial.println("fall");
     if (!buttonTimer.isStarted()){
         downCount = 0;
-        Serial.println("DBG:int:start Timer");
         buttonTimer.start();
     }
 }
